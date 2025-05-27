@@ -197,6 +197,62 @@
 
     document.getElementById('startTraversal').addEventListener('click', startTraversal);
   </script>
+  <button onclick="startMVC()">Показать книги (MVC)</button>
+
+<script>
+  class BookModel {
+    constructor() {
+      this.books = [
+        { id: 1, title: "JavaScript для початківців", author: "Соловйова" },
+        { id: 2, title: "Основи HTML", author: "Соловйова" }
+      ];
+    }
+
+    getAllBooks() {
+      return this.books;
+    }
+
+    addBook(book) {
+      this.books.push(book);
+    }
+  }
+
+  class BookView {
+    displayBooks(books) {
+      const list = books.map(book => `<li>${book.title} — ${book.author}</li>`).join("");
+      const output = `<ul>${list}</ul>`;
+      document.getElementById("mvc-output").innerHTML = output;
+    }
+  }
+
+  class BookController {
+    constructor(model, view) {
+      this.model = model;
+      this.view = view;
+    }
+
+    showBooks() {
+      const books = this.model.getAllBooks();
+      this.view.displayBooks(books);
+    }
+
+    addNewBook(title, author) {
+      const newBook = { id: Date.now(), title, author };
+      this.model.addBook(newBook);
+      this.showBooks();
+    }
+  }
+
+  function startMVC() {
+    const model = new BookModel();
+    const view = new BookView();
+    const controller = new BookController(model, view);
+    controller.showBooks();
+  }
+</script>
+
+<div id="mvc-output"></div>
+
 </body>
 
 </html>
